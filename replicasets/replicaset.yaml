@@ -1,0 +1,25 @@
+# Creating this file referencing the pods/nginx.yaml pod definition file
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myapp-replicaset
+  labels:
+    app: myapp
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  replicas: 3
+  template:
+    metadata:
+      name: nginx-2
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+
+# the labels used for the POD and the labels used under the selector should be same
+# the labels used on the top for replica set doesn't really matter
+# the labels on the selector and POD matters - as this is what ties them together so they have to be the same
