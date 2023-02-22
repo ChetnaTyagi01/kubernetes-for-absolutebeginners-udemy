@@ -196,3 +196,96 @@ myapp-replicaset-qghfm   1/1     Running   0          25m
 
 myapp-replicaset-tb98q   1/1     Running   0          25m
 
+# Creating Deployments
+
+- kubectl get pods
+
+No resources found in default namespace.
+
+
+- kubectl create -f .\deployment.yaml
+
+deployment.apps/myapp-deployment created
+
+
+- kubectl get deployments
+
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+
+myapp-deployment   0/3     3            0           8s
+
+
+- kubectl get replicasets
+
+NAME                          DESIRED   CURRENT   READY   AGE
+
+myapp-deployment-576897dc49   3         3         3       17s
+
+
+- kubectl get pods 
+
+NAME                                READY   STATUS    RESTARTS   AGE 
+
+myapp-deployment-576897dc49-qplqf   1/1     Running   0          1m6s
+
+myapp-deployment-576897dc49-r8s46   1/1     Running   0          1m6s
+
+myapp-deployment-576897dc49-zq5fn   1/1     Running   0          1m6s
+
+
+- kubectl get all
+
+NAME                                    READY   STATUS    RESTARTS   AGE  
+
+pod/myapp-deployment-576897dc49-qplqf   1/1     Running   0          3m21s
+
+pod/myapp-deployment-576897dc49-r8s46   1/1     Running   0          3m21s
+
+pod/myapp-deployment-576897dc49-zq5fn   1/1     Running   0          3m21s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE 
+
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   2d  
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE   
+
+deployment.apps/myapp-deployment   3/3     3            3           3m22s 
+
+NAME                                          DESIRED   CURRENT   READY   AGE  
+
+replicaset.apps/myapp-deployment-576897dc49   3         3         3       3m22s
+
+
+- kubectl describe deployment myapp-deployment
+
+Name:                   myapp-deployment
+Namespace:              default
+CreationTimestamp:      Wed, 22 Feb 2023 16:27:53 +0530
+Labels:                 app=myapp
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=myapp
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=myapp
+  Containers:
+   nginx:
+    Image:        nginx
+    Port:         <none>
+    Host Port:    <none>
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   myapp-deployment-576897dc49 (3/3 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  4m21s  deployment-controller  Scaled up replica set myapp-deployment-576897dc49 to 3
